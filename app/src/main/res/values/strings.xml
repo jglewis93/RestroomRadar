@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">RestroomRadar</string>
+    <string name="title_activity_maps">RestroomMap</string>
+</resources>
