@@ -26,18 +26,21 @@ public class MapsActivity extends FragmentActivity {
     private Button newBathroom;
     private String m_Title = "";
     private String m_Description = "";
+    private int id;
+    SchemaContract db = new SchemaContract(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         setUpMapIfNeeded();
+        id = db.getNumberEntries();
         newBathroom = (Button)findViewById(R.id.new_button);
         newBathroom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MapsActivity.this);
-                builder.setTitle("Enter Bathroom Name:");
+                builder.setTitle("Enter Bathroom Location:");
 
                 // Set up the input
                 final EditText input = new EditText(MapsActivity.this);
@@ -52,7 +55,7 @@ public class MapsActivity extends FragmentActivity {
                         m_Title = input.getText().toString();
 
                         AlertDialog.Builder builder2 = new AlertDialog.Builder(MapsActivity.this);
-                        builder2.setTitle("Enter Bathroom Location:");
+                        builder2.setTitle("Enter Bathroom Review:");
 
                         // Set up the input
                         final EditText input2 = new EditText(MapsActivity.this);
@@ -72,6 +75,11 @@ public class MapsActivity extends FragmentActivity {
                                         .title(m_Title)
                                         .snippet(m_Description)
                                         .draggable(true));
+
+                                Bathroom bathroom = new Bathroom(museum, id);
+                                //db.newEntry(bathroom.getMarkerTitle(), bathroom.getMarkerDescription(), bathroom.getMarkerLongitude(), bathroom.getMarkerLatitude());
+                                //id++;
+
                             }
                         });
                         builder2.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -92,7 +100,23 @@ public class MapsActivity extends FragmentActivity {
                 });
 
                 builder.show();
+            }
+        });
+        mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+            @Override
+            public void onMarkerDragStart(Marker marker) {
 
+            }
+
+            @Override
+            public void onMarkerDrag(Marker marker) {
+
+            }
+
+            @Override
+            public void onMarkerDragEnd(Marker marker) {
+                //db.setLatitude(Integer.parseInt(marker.getId()), marker.getPosition().latitude);
+                //db.setLongitude(Integer.parseInt(marker.getId()), marker.getPosition().longitude);
             }
         });
     }
@@ -173,5 +197,16 @@ public class MapsActivity extends FragmentActivity {
         // Zoom in the Google Map
         mMap.animateCamera(CameraUpdateFactory.zoomTo(14));
         //mMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title("You are here!").snippet("Consider yourself located"));
+
+        /*for(int i=0; i<db.getNumberEntries(); i++)
+        {
+            LatLng position = new LatLng(db.getLatitude(i), db.getLongitude(i));
+            Marker marker = mMap.addMarker(new MarkerOptions()
+                    .position(position)
+                    .title(db.getTitle(i))
+                    .snippet(db.getDescription(i))
+                    .draggable(false));
+        }*/
+
     }
 }
