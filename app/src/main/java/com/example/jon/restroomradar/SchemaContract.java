@@ -29,11 +29,11 @@ public final class SchemaContract extends SQLiteOpenHelper{
     private static final String TEXT_TYPE = " TEXT";
     private static final String COMMA_SEP = ",";
     private static final String SQL_CREATE_ENTRIES = "CREATE TABLE " + TABLE_NAME + " (" +
-            UID + " integer primary key increment, " +
-            COLUMN_LOCATION_TITLE + " title string," +
-            COLUMN_LOCATION_DESCRIPTION + " description string," +
-            COLUMN_LOCATION_LATITUDE + " latitude double," +
-            COLUMN_LOCATION_LONGITUDE + " longitude double);";
+            UID + " integer primary key autoincrement, " +
+            COLUMN_LOCATION_TITLE + " string," +
+            COLUMN_LOCATION_DESCRIPTION + " string," +
+            COLUMN_LOCATION_LATITUDE + " double," +
+            COLUMN_LOCATION_LONGITUDE + " double);";
     private static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME + ";";
 
     public SchemaContract(Context context) {
@@ -44,7 +44,7 @@ public final class SchemaContract extends SQLiteOpenHelper{
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_ENTRIES);
         db.execSQL("INSERT INTO " + TABLE_NAME + " (" + COLUMN_LOCATION_TITLE + ", " + COLUMN_LOCATION_DESCRIPTION + ", " + COLUMN_LOCATION_LONGITUDE + ", " + COLUMN_LOCATION_LATITUDE + ") " +
-                "VALUES (test, test, 0, 0);");
+                "VALUES ('test', 'test', '0.0', '0.0');");
     }
 
     @Override
@@ -88,7 +88,7 @@ public final class SchemaContract extends SQLiteOpenHelper{
     }
 
     public int getNumberEntries(){
-        //SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
 
         //Cursor cursor = db.rawQuery("SELECT " + UID + " FROM " + TABLE_NAME, null);
         //cursor.moveToLast();
@@ -108,18 +108,18 @@ public final class SchemaContract extends SQLiteOpenHelper{
 
     public void setTitle(int id, String title){
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("UPDATE " + TABLE_NAME + " SET " + COLUMN_LOCATION_TITLE + " = " + title + " WHERE " + UID + "=" + id + ";", null);
+        db.execSQL("UPDATE " + TABLE_NAME + " SET " + COLUMN_LOCATION_TITLE + " = '" + title + "' WHERE " + UID + "=" + id + ";", null);
     }
 
     public void setDescription(int id, String description){
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("UPDATE " + TABLE_NAME + " SET " + COLUMN_LOCATION_DESCRIPTION + " = " + description + " WHERE " + UID + "=" + id + ";", null);
+        db.execSQL("UPDATE " + TABLE_NAME + " SET " + COLUMN_LOCATION_DESCRIPTION + " = '" + description + "' WHERE " + UID + "=" + id + ";", null);
     }
 
     public void newEntry(String title, String description, double longitude, double latitude)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("INSERT INTO " + TABLE_NAME + " (" + COLUMN_LOCATION_TITLE + ", " + COLUMN_LOCATION_DESCRIPTION + ", " + COLUMN_LOCATION_LONGITUDE + ", " + COLUMN_LOCATION_LATITUDE + ") " +
-                "VALUES (" + title + ", " + description + ", " + longitude + ", " + latitude + ");");
+                "VALUES ('" + title + "', '" + description + "', " + longitude + ", " + latitude + ");");
     }
 }

@@ -26,29 +26,27 @@ public class MapsActivity extends FragmentActivity {
     private Button newBathroom;
     private String m_Title = "";
     private String m_Description = "";
-    private int id;
-    SchemaContract db = new SchemaContract(this);
+    //private int id;
+    //SchemaContract db = new SchemaContract(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         setUpMapIfNeeded();
-        id = db.getNumberEntries();
+        //id = db.getNumberEntries();
+
         newBathroom = (Button)findViewById(R.id.new_button);
         newBathroom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //Alert dialogs that get the location and review of the newly created bathroom
                 AlertDialog.Builder builder = new AlertDialog.Builder(MapsActivity.this);
                 builder.setTitle("Enter Bathroom Location:");
 
-                // Set up the input
                 final EditText input = new EditText(MapsActivity.this);
-                // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
                 input.setInputType(InputType.TYPE_CLASS_TEXT);
                 builder.setView(input);
-
-                // Set up the buttons
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -57,18 +55,15 @@ public class MapsActivity extends FragmentActivity {
                         AlertDialog.Builder builder2 = new AlertDialog.Builder(MapsActivity.this);
                         builder2.setTitle("Enter Bathroom Review:");
 
-                        // Set up the input
                         final EditText input2 = new EditText(MapsActivity.this);
-                        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
                         input2.setInputType(InputType.TYPE_CLASS_TEXT);
                         builder2.setView(input2);
 
-                        // Set up the buttons
                         builder2.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 m_Description = input2.getText().toString();
-
+                                //creates the marker for the new bathroom with the entered information
                                 LatLng currentPosition = new LatLng(mMap.getMyLocation().getLatitude(), mMap.getMyLocation().getLongitude());
                                 Marker museum = mMap.addMarker(new MarkerOptions()
                                         .position(currentPosition)
@@ -76,8 +71,8 @@ public class MapsActivity extends FragmentActivity {
                                         .snippet(m_Description)
                                         .draggable(true));
 
-                                Bathroom bathroom = new Bathroom(museum, id);
-                                //db.newEntry(bathroom.getMarkerTitle(), bathroom.getMarkerDescription(), bathroom.getMarkerLongitude(), bathroom.getMarkerLatitude());
+                                //Bathroom bathroom = new Bathroom(museum, id);
+                                //db.newEntry(museum.getTitle(), museum.getSnippet(), museum.getPosition().longitude, museum.getPosition().latitude);
                                 //id++;
 
                             }
@@ -112,7 +107,7 @@ public class MapsActivity extends FragmentActivity {
             public void onMarkerDrag(Marker marker) {
 
             }
-
+            //Saves new marker position to the database
             @Override
             public void onMarkerDragEnd(Marker marker) {
                 //db.setLatitude(Integer.parseInt(marker.getId()), marker.getPosition().latitude);
@@ -198,6 +193,7 @@ public class MapsActivity extends FragmentActivity {
         mMap.animateCamera(CameraUpdateFactory.zoomTo(14));
         //mMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title("You are here!").snippet("Consider yourself located"));
 
+        //Populates the map with previously created bathrooms
         /*for(int i=0; i<db.getNumberEntries(); i++)
         {
             LatLng position = new LatLng(db.getLatitude(i), db.getLongitude(i));
